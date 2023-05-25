@@ -1,6 +1,7 @@
-import { yellow } from '@mui/material/colors';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import {
+    Grid, 
+    Typography 
+} from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 
 const useStyles = makeStyles()((theme) => {
@@ -11,8 +12,11 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.common.white            
         },
         mainItem: {
-            padding: theme.spacing(3),
-            border: 5
+            padding: theme.spacing(6),
+            textAlign: 'left',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
         }
     };
 });
@@ -20,13 +24,16 @@ const useStyles = makeStyles()((theme) => {
 export default function MainGridItem() {
     const { classes } = useStyles();
     return (
-        <Grid container>
-            <Grid item>
-                <Typography>
-                    Ahoj
+        <Grid container className={classes.mainContainer}>
+            <Grid item className={classes.mainItem}>
+                <Typography component='h2' variant='h5'>
+                    Hello Coding
                 </Typography>
-            </Grid>
-            
+
+                <Typography variant='body1' paragraph>
+                    Do you want to learn to code? Smash your career goals. Build websites, games, apps and artificial intelligence project in 99 days.
+                </Typography>
+            </Grid>            
         </Grid>
         
     );

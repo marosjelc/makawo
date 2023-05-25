@@ -1,10 +1,17 @@
-import React from 'react';
-import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
+import { 
+    Container,
+    Toolbar, 
+    Typography, 
+    Box, 
+    Link, 
+    AppBar, 
+    Drawer, 
+    IconButton, 
+    MenuItem
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -18,30 +25,103 @@ const useStyles = makeStyles()((theme) => {
         menuOption: {
             padding: theme.spacing(1),
             [theme.breakpoints.up('md')]: {
-                paddingLeft: theme.spacing(3)
-            }
+                paddingLeft: theme.spacing(10)
+            },
+            color: "white"
         },
         toolbar: {
             display: "flex",
             flexDirection: "column",
             [theme.breakpoints.up('md')]: {
                 flexDirection: "row",
-                alignItems: "flex-end",
                 justifyContent: "space-between"
             }
         },
         title: {
             fontWeight: "bold"
+        },
+        menuIcon: {
+            color: 'white'
         }
     };
 });
 
 export default function Navbar() {
+    const [state, setState] = useState({
+        toggleMenu: false,
+        toggleMenuOpen: false
+    });
+
+    const { toggleMenu, toggleMenuOpen } = state;
+
+    useEffect(() => {
+        const setResponsiveness = () => {
+            return window.innerWidth < 960
+                ? setState((prevState) => ({ ...prevState, toggleMenu: true }))
+                : setState((prevState) => ({ ...prevState, toggleMenu: false }));
+        };
+
+        setResponsiveness();
+        window.addEventListener("resize", () => setResponsiveness());
+    }, []);
+
     const { classes } = useStyles();
-    return (
-        <Container>
+
+    const displayToggleMenu = () => {
+        const handleToggleMenuOpen = () => setState((prevState) => ({
+            ...prevState, toggleMenuOpen: true
+        }));
+
+        const handleToggleMenuClose = () => setState((prevState) => ({
+            ...prevState, toggleMenuOpen: false
+        }));
+
+        return (
+            <Toolbar>
+                <IconButton
+                    {...{
+                        onClick: handleToggleMenuOpen
+                    }}
+                >
+                    <MenuIcon className={classes.menuIcon} />
+                </IconButton>
+                <Drawer
+                    {...{
+                        anchor: 'left',
+                        open: toggleMenuOpen,
+                        onClose: handleToggleMenuClose
+                    }}
+                >
+                    <div>
+                        { getToggleMenuOptions() }
+                    </div>
+                </Drawer>
+            </Toolbar>
+        );
+    };
+
+    const getToggleMenuOptions = () => {
+        return (
+            <Box>
+                {['home', 'home2', 'home3'].map((menuOption) => (
+                    <MenuItem>
+                        {menuOption.toUpperCase()}
+                    </MenuItem>
+                ))}
+            </Box>
+        );
+    };
+
+    const displayLargeMenu = () => {
+        return (
             <Toolbar className={classes.toolbar}>
-                <Typography className={classes.title}>Makawo</Typography>
+                <Typography 
+                    className={classes.title}
+                    component="h1"
+                    variant="h6"
+                >
+                    Makawo
+                </Typography>
                 <Box className={classes.menuBox}>
                     {['home', 'home2', 'home3'].map((menuOption) => (
                         <Link
@@ -54,6 +134,14 @@ export default function Navbar() {
                     ))}
                 </Box>
             </Toolbar>
+        );
+    };
+
+    return (
+        <Container>
+            <AppBar>
+                {toggleMenu ? displayToggleMenu() : displayLargeMenu() }
+            </AppBar>
         </Container>
     );
 }

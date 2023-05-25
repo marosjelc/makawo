@@ -3,6 +3,7 @@ import React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Navbar from './components/Navbar';
 import GridLayout from './components/GridLayout';
+import Footer from './components/Footer';
 import { Container } from '@mui/system';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <GridLayout />
         </main>
       </Container>
+      <Footer />
     </div>
   );
 }
