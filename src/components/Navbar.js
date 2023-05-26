@@ -9,7 +9,8 @@ import {
     AppBar, 
     Drawer, 
     IconButton, 
-    MenuItem
+    MenuItem,
+    Avatar
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -35,10 +36,18 @@ const useStyles = makeStyles()((theme) => {
             [theme.breakpoints.up('md')]: {
                 flexDirection: "row",
                 justifyContent: "space-between"
+                
             }
         },
+        miniToolbar: {
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+        },
         title: {
-            fontWeight: "bold"
+            fontWeight: "bold",
+            textDecoration: "none",
+            color: "white"
         },
         menuIcon: {
             color: 'white'
@@ -77,38 +86,45 @@ export default function Navbar() {
         }));
 
         return (
-            <Toolbar>
-                <IconButton
-                    {...{
-                        onClick: handleToggleMenuOpen
-                    }}
-                >
-                    <MenuIcon className={classes.menuIcon} />
-                </IconButton>
+            <Toolbar className={classes.miniToolbar}>
                 <Drawer
                     {...{
-                        anchor: 'left',
+                        anchor: "top",
                         open: toggleMenuOpen,
                         onClose: handleToggleMenuClose
                     }}
                 >
                     <div>
-                        { getToggleMenuOptions() }
+                        <Box>
+                            {['home', 'home2', 'home3'].map((menuOption) => (
+                                <MenuItem>
+                                    {menuOption.toUpperCase()}
+                                </MenuItem>
+                            ))}
+                        </Box>
                     </div>
                 </Drawer>
+                <IconButton
+                    onClick={handleToggleMenuOpen}
+                    size="large"
+                    edge="start"
+                >
+                    <MenuIcon className={classes.menuIcon} />
+                </IconButton>
+                <Typography
+                    className={classes.title}
+                    component="a"
+                    variant="h6"
+                    href=""
+                >
+                    Makawo
+                </Typography>
+                <Box>
+                    <IconButton sx={{ p: 0 }}>
+                        <Avatar alt="Jane Doe" src="./static/44.jpg" />
+                    </IconButton>
+                </Box>
             </Toolbar>
-        );
-    };
-
-    const getToggleMenuOptions = () => {
-        return (
-            <Box>
-                {['home', 'home2', 'home3'].map((menuOption) => (
-                    <MenuItem>
-                        {menuOption.toUpperCase()}
-                    </MenuItem>
-                ))}
-            </Box>
         );
     };
 
@@ -117,8 +133,9 @@ export default function Navbar() {
             <Toolbar className={classes.toolbar}>
                 <Typography 
                     className={classes.title}
-                    component="h1"
+                    component="a"
                     variant="h6"
+                    href=""
                 >
                     Makawo
                 </Typography>
@@ -138,10 +155,10 @@ export default function Navbar() {
     };
 
     return (
-        <Container>
-            <AppBar>
+        <AppBar>
+            <Container>
                 {toggleMenu ? displayToggleMenu() : displayLargeMenu() }
-            </AppBar>
-        </Container>
+            </Container>
+        </AppBar>
     );
 }
