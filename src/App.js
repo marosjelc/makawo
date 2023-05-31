@@ -10,7 +10,9 @@ function App() {
   return (
     <div className="App">
       <CssBaseline />
-      <Navbar />
+      <Navbar 
+        pageTitle="Makawo"
+      />
       <Container>
         <main>
           <GridLayout />

@@ -1,66 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from 'tss-react/mui';
 import { 
     Container,
-    Toolbar, 
-    Typography, 
-    Box, 
-    Link, 
-    AppBar, 
-    Drawer, 
-    IconButton, 
-    MenuItem,
-    Avatar
+    AppBar,
+    Typography,
+    Toolbar,
+    Drawer,
+    IconButton,
+    Box,
+    MenuItem
 } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 import MenuIcon from '@mui/icons-material/Menu';
 
 const useStyles = makeStyles()((theme) => {
     return {
-        menuBox: {
-            display: "flex",
-            flexDirection: "column",
+        appBar: {
+            position: 'sticky',
+            backgroundColor: "#FFB61C",
             [theme.breakpoints.up('md')]: {
-                flexDirection: "row"
-            }
-        },
-        menuOption: {
-            padding: theme.spacing(1),
-            [theme.breakpoints.up('md')]: {
-                paddingLeft: theme.spacing(10)
-            },
-            color: "white"
-        },
-        toolbar: {
-            display: "flex",
-            flexDirection: "column",
-            [theme.breakpoints.up('md')]: {
-                flexDirection: "row",
-                justifyContent: "space-between"
-                
+                                
             }
         },
         miniToolbar: {
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between"
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'row'
         },
-        title: {
-            fontWeight: "bold",
-            textDecoration: "none",
-            color: "white"
-        },
-        menuIcon: {
+        miniToolbarMenuIcon: {
             color: 'white'
+        },
+        miniToolbarMenu: {
+            
         }
     };
 });
 
-export default function Navbar() {
+export default function Navbar(props) {
+    const { classes } = useStyles();
+
     const [state, setState] = useState({
         toggleMenu: false,
         toggleMenuOpen: false
     });
-
     const { toggleMenu, toggleMenuOpen } = state;
 
     useEffect(() => {
@@ -74,19 +55,27 @@ export default function Navbar() {
         window.addEventListener("resize", () => setResponsiveness());
     }, []);
 
-    const { classes } = useStyles();
-
-    const displayToggleMenu = () => {
+    /* Display Mini Menu (mobile devices) */
+    const displayMiniMenu = () => {
         const handleToggleMenuOpen = () => setState((prevState) => ({
             ...prevState, toggleMenuOpen: true
         }));
-
+    
         const handleToggleMenuClose = () => setState((prevState) => ({
             ...prevState, toggleMenuOpen: false
         }));
 
         return (
             <Toolbar className={classes.miniToolbar}>
+                <IconButton
+                    {...{
+                        onClick: handleToggleMenuOpen
+                    }}
+                >
+                    <MenuIcon 
+                        className={classes.miniToolbarMenuIcon}
+                    />
+                </IconButton>
                 <Drawer
                     {...{
                         anchor: "top",
@@ -95,7 +84,8 @@ export default function Navbar() {
                     }}
                 >
                     <div>
-                        <Box>
+                        <Box className={classes.miniToolbarMenu}>
+                            
                             {['home', 'home2', 'home3'].map((menuOption) => (
                                 <MenuItem>
                                     {menuOption.toUpperCase()}
@@ -104,60 +94,28 @@ export default function Navbar() {
                         </Box>
                     </div>
                 </Drawer>
-                <IconButton
-                    onClick={handleToggleMenuOpen}
-                    size="large"
-                    edge="start"
-                >
-                    <MenuIcon className={classes.menuIcon} />
-                </IconButton>
                 <Typography
-                    className={classes.title}
-                    component="a"
-                    variant="h6"
-                    href=""
+                    component="h1"
+                    variant="h5"
                 >
-                    Makawo
+                    {props.pageTitle}
                 </Typography>
-                <Box>
-                    <IconButton sx={{ p: 0 }}>
-                        <Avatar alt="Jane Doe" src="./static/44.jpg" />
-                    </IconButton>
-                </Box>
+                <Typography>ikona</Typography>
             </Toolbar>
         );
     };
 
+    /* Display Large Menu (desktop) */
     const displayLargeMenu = () => {
         return (
-            <Toolbar className={classes.toolbar}>
-                <Typography 
-                    className={classes.title}
-                    component="a"
-                    variant="h6"
-                    href=""
-                >
-                    Makawo
-                </Typography>
-                <Box className={classes.menuBox}>
-                    {['home', 'home2', 'home3'].map((menuOption) => (
-                        <Link
-                            component='button'
-                            variant='body1'
-                            className={classes.menuOption}
-                        >
-                            {menuOption.toUpperCase()}
-                        </Link>
-                    ))}
-                </Box>
-            </Toolbar>
+            <Typography>Large Menu</Typography>
         );
     };
 
     return (
-        <AppBar>
+        <AppBar className={classes.appBar}>
             <Container>
-                {toggleMenu ? displayToggleMenu() : displayLargeMenu() }
+                {toggleMenu ? displayMiniMenu() : displayLargeMenu() }
             </Container>
         </AppBar>
     );
